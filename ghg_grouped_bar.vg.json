@@ -1,0 +1,39 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Annual greenhouse gas (GHG) emissions by source",
+    "subtitle": "X = Source ; Y = Emissions"
+  },
+  "width": 800,
+  "height": 420,
+  "data": { "values": [] },
+  "mark": {
+    "type": "bar",
+    "tooltip": true,
+    "clip": true
+  },
+  "encoding": {
+    "x": {
+      "field": "source",
+      "type": "nominal",
+      "axis": { "title": "Source (short code)", "labelAngle": 0 }
+    },
+    "xOffset": { "field": "year", "type": "nominal" },
+    "y": {
+      "field": "emissions_num",
+      "type": "quantitative",
+      "axis": { "title": "Emissions" }
+    },
+    "color": {
+      "field": "year",
+      "type": "nominal",
+      "legend": { "title": "Year" }
+    },
+    "tooltip": [
+      { "field": "source", "type": "nominal", "title": "Source (code)" },
+      { "field": "source_full", "type": "nominal", "title": "Source (full)" },
+      { "field": "year", "type": "nominal", "title": "Year" },
+      { "field": "emissions_num", "type": "quantitative", "title": "Emissions" }
+    ]
+  }
+}
