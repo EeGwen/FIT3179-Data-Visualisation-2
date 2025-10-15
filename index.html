@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Monthly Air Pollution — Multi-line Vega-Lite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Vega / Vega-Lite / Vega-Embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <!-- d3 to load CSV -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 20px; }
+    .controls { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; }
+    .control-group { border: 1px solid #eee; padding: 10px; border-radius: 6px; background: #fafafa; }
+    #chart { margin-top: 10px; }
+    label { margin-right: 8px; user-select: none; }
+    .small-note { font-size: 0.9em; color: #666; margin-top:6px; }
+  </style>
+</head>
+<body>
+  <h1>Monthly Air Pollution — Multi-line Chart</h1>
+
+  <div class="controls">
+    <div class="control-group" id="pollutant-controls">
+      <strong>Pollutant (choose one)</strong>
+      <div id="pollutant-radios">
+        <!-- Radios populated by JS -->
+      </div>
+    </div>
+
+    <div class="control-group" id="year-controls">
+      <strong>Year(s) (choose one or more)</strong>
+      <div id="year-checkboxes" style="display:flex; flex-direction: column; gap:6px;">
+        <!-- Year checkboxes populated by JS -->
+      </div>
+      <div class="small-note">Select multiple years to compare; colors represent years.</div>
+    </div>
+
+    <div class="control-group">
+      <strong>Actions</strong><br>
+      <button id="reset-btn">Reset (all years, first pollutant)</button>
+    </div>
+  </div>
+
+  <div id="chart"></div>
+
+  <script src="vega_air_pollution.js"></script>
+</body>
+</html>
