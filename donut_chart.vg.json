@@ -1,0 +1,35 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {"text": "Distribution of Pollution Levels by City Count", "anchor": "start"},
+  "width": 400,
+  "height": 400,
+  "data": {"values": []},
+  "layer": [
+    {
+      "mark": {"type": "arc", "innerRadius": 80, "outerRadius": 160, "stroke": "#fff", "strokeWidth": 2},
+      "encoding": {
+        "theta": {"field": "count", "type": "quantitative", "stack": true},
+        "color": {
+          "field": "Air_Pollution_Level", 
+          "type": "nominal",
+          "scale": {
+            "domain": ["Good", "Moderate", "Unhealthy"],
+            "range": ["#2ca02c", "#ffcc00", "#ff7f0e"]
+          },
+          "legend": {"title": "Pollution Level"}
+        },
+        "tooltip": [
+          {"field": "Air_Pollution_Level", "type": "nominal", "title": "Level"},
+          {"field": "count", "type": "quantitative", "title": "Number of Cities"},
+          {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".1%"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "text", "fontSize": 14, "fontWeight": "bold", "fill": "#333"},
+      "encoding": {
+        "text": {"field": "total", "type": "quantitative", "aggregate": "sum"}
+      }
+    }
+  ]
+}
