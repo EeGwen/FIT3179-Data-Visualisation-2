@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Air Quality Across Malaysia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 20px; background:#f6f7f8; }
+    .controls { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; }
+    .control-group { border: 1px solid #eee; padding: 10px; border-radius: 6px; background: #fafafa; min-width: 180px; }
+    label { display: block; margin-bottom: 6px; user-select: none; }
+    select, button { margin-top: 6px; }
+    .small-note { font-size: 0.9em; color: #666; margin-top:6px; }
+    hr { border: none; border-top: 1px solid #eee; margin: 28px 0; }
+    #chart, #ghg-chart, #map, #world-map, #donut-chart { margin-top: 10px; background: white; }
+
+    /* New styles for bordered graph containers */
+    .graph-container { 
+      border: 2px solid #ddd; 
+      padding: 18px; 
+      border-radius: 8px; 
+      margin-bottom: 30px; 
+      width: 100%;
+      box-sizing: border-box;
+      background: #fff;
+    }
+    h2.main-title { text-align: center; font-weight: bold; color: #000; margin-bottom: 40px; font-size: 2em; }
+    .graph-container h1 { font-size: 1.2rem; margin: 4px 0 12px 0; }
+
+    /* Two-column visual + description layout for map, chart, ghg (donut excluded) */
+    .visual-row { display: flex; gap: 20px; align-items: flex-start; }
+    .visual-left { flex: 0 0 70%; }   /* graph area */
+    .visual-right { flex: 0 0 30%; }  /* text / description area reserved */
+
+    /* TEXTBOX: removed borders/background so text appears beside map without box */
+    .visual-right .textbox {
+      border: none;            /* remove any border */
+      border-left: none;       /* remove left border used previously */
+      padding-left: 12px;      /* small left padding for breathing room */
+      color:#222;
+      font-size: 1.0rem;
+      line-height: 1.7;
+      min-height: 220px;
+      background: transparent; /* remove background */
+      border-radius: 0;        /* remove rounded corners */
+      box-shadow: none;        /* remove any shadow */
+    }
+
+    /* Make the visual containers full width of the left column and taller */
+    #map { width: 100%; height: 650px; } 
+    #donut-chart { width: 100%; height: 520px; display: flex; justify-content: center; align-items: center; }
+    #chart { width: 100%; min-height: 520px; }
+    #ghg-chart { width: 100%; min-height: 520px; }
+
+    /* responsive: stack on small screens */
+    @media (max-width: 900px) {
+      .visual-row { flex-direction: column; }
+      .visual-left, .visual-right { flex: 1 1 100%; }
+      .graph-container { padding: 12px; max-width: 100%; }
+      #map { height: 520px; }
+      #donut-chart { height: 420px; }
+      #chart, #ghg-chart { min-height: 420px; }
+      .visual-right .textbox { min-height: 160px; margin-top: 12px; border-left: none; padding-left: 0; border-top: 1px solid #eee; padding-top: 12px; background: #fbfbfb; }
+    }
+
+    /* Ensure each "line" block uses normal inline wrapping but we manually split lines */
+    .textbox .line { display:block; margin:0 0 6px 0; }
+    .textbox .headline { font-weight: 600; margin-bottom:8px; }
+  </style>
+</head>
+<body>
+
+<h2 class="main-title">Air Quality Across Malaysia</h2>
+
+<!-- MAP: now left column (graph) + right column (text box) -->
+<div class="graph-container">
+  <h1>Air Pollution Index (API) in Malaysia in 2022</h1>
+
+  <div class="controls" id="map-controls">
+    <div class="control-group">
+      <strong>Day</strong>
+      <select id="filter-day"><option value="All">All</option></select>
+    </div>
+    <div class="control-group">
+      <strong>Month</strong>
+      <select id="filter-month"><option value="All">All</option></select>
+    </div>
+    <div class="control-group">
+      <strong>Time</strong>
+      <select id="filter-time"><option value="All">All</option></select>
+    </div>
+    <div class="control-group">
+      <strong>Actions</strong><br>
+      <button id="map-reset">Reset filters</button>
+      <div class="small-note" style="margin-top:8px;">Choose Day / Month / Time to see API changes.</div>
+    </div>
+  </div>
+
+  <div class="visual-row">
+    <div class="visual-left">
+      <div id="map"></div>
+    </div>
+    <div class="visual-right">
+      <!-- Updated description: each line has no more than ten words -->
+      <div class="textbox" id="map-description" aria-label="Map description">
+        <div class="headline">Map overview</div>
+
+        <!-- Required sentence inserted and broken into short lines (≤ 10 words per line) -->
+        <div class="line">The map shows that most areas in</div>
+        <div class="line">Peninsular and East Malaysia have good</div>
+        <div class="line">air quality, shown by many green markers,</div>
+        <div class="line">though parts of the west coast of</div>
+        <div class="line">Peninsular Malaysia and northern Borneo display</div>
+        <div class="line">moderate pollution (yellow markers).</div>
+
+        <!-- A short complementary sentence split across lines with ≤10 words each -->
+        <div class="line">Markers indicate monitoring stations and pollution level.</div>
+        <div class="line">Use the Day, Month, and Time filters</div>
+        <div class="line">to explore temporal changes and local hotspots.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DONUT (unchanged: full width) -->
+<div class="graph-container">
+  <h1>Pollution Level Distribution</h1>
+
+  <!-- NEW explanatory paragraph added below the header as requested -->
+  <div class="donut-description">
+    From this graph, viewers can quickly assess the overall
+    air quality landscape for that year. It shows which
+    pollution level was most common among the cities measured,
+    indicating whether the majority experienced clean, acceptable,
+    or polluted air. For instance, if the "Moderate" category
+    is the largest, it suggests that while most cities did not
+    have pristine air, they also largely avoided the most
+    severe "Unhealthy" classification. This provides a
+    high-level, snapshot understanding of the environmental
+    challenge's scale for the given year.
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <strong>Year</strong>
+      <select id="donut-year"></select>
+      <div class="small-note" style="margin-top:8px;">Shows proportion of cities in each pollution category for selected year.</div>
+    </div>
+  </div>
+  <div id="donut-chart"></div>
+</div>
+
+<!-- MONTHLY (multiline) chart: left graph + right text box -->
+<div class="graph-container">
+  <h1>Monthly Air Pollution</h1>
+  <div class="controls">
+    <div class="control-group" id="pollutant-controls">
+      <strong>Pollutant (choose one)</strong>
+      <div id="pollutant-radios"></div>
+    </div>
+    <div class="control-group" id="year-controls">
+      <strong>Year(s) (choose one or more)</strong>
+      <div id="year-checkboxes" style="display:flex; flex-direction: column; gap:6px;"></div>
+      <div class="small-note">Select multiple years to compare; colors represent years.</div>
+    </div>
+    <div class="control-group">
+      <strong>Actions</strong><br>
+      <button id="reset-btn">Reset (all years, first pollutant)</button>
+    </div>
+  </div>
+
+  <div class="visual-row">
+    <div class="visual-left">
+      <div id="chart"></div>
+    </div>
+    <div class="visual-right">
+      <div class="textbox" id="chart-description" aria-label="Monthly air pollution description">
+    <div class="headline">Monthly Air Pollution Overview</div>
+
+    <div class="line">This multiline graph shows monthly air pollution</div>
+    <div class="line">trends in Malaysia from 2017 to 2022, focusing</div>
+    <div class="line">on different pollutants such as CO, NO₂, and O₃.</div>
+    <div class="line">Each colored line represents a specific year,</div>
+    <div class="line">helping to visualize changes over time.</div>
+
+    <div class="line">This visualization helps viewers compare pollution</div>
+    <div class="line">patterns across years, identify seasonal variations,</div>
+    <div class="line">and recognize any unusual peaks or declines that</div>
+    <div class="line">could be linked to environmental or policy changes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GHG grouped bar: left graph + right text box -->
+<div class="graph-container">
+  <h1>Annual greenhouse gas (GHG) emissions by source</h1>
+  <div class="controls" style="margin-bottom:6px;">
+    <div class="control-group" id="ghg-year-controls" style="min-width:260px;">
+      <strong>Year(s) (choose one or more)</strong>
+      <div id="ghg-year-checkboxes" style="display:flex; flex-direction: column; gap:6px; margin-top:8px"></div>
+      <div class="small-note">Select multiple years to compare; colors represent years.</div>
+    </div>
+    <div class="control-group" style="max-width:560px;">
+      <strong>How is this data produced?</strong>
+      <p style="margin-top:6px; margin-bottom:6px;">
+        Official data on GHG emissions compiled by Ministry of Natural Resources and Environmental Sustainability.
+      </p>
+      <div id="ghg-source-legend" class="small-note"></div>
+    </div>
+  </div>
+
+  <div class="visual-row">
+    <div class="visual-left">
+      <div id="ghg-chart"></div>
+    </div>
+    <div class="visual-right">
+      <!-- REPLACED: GHG description filled with user paragraph split to <=10 words per line -->
+      <div class="textbox" id="ghg-description" aria-label="GHG description">
+        <div class="headline">GHG emissions summary</div>
+
+        <div class="line">From the graph, it is evident that</div>
+        <div class="line">the energy sector consistently contributes the</div>
+        <div class="line">largest share of GHG emissions, followed by</div>
+        <div class="line">total and net emissions, while agriculture and</div>
+        <div class="line">waste contribute relatively smaller amounts.</div>
+
+        <div class="line">There is a slight upward trend in</div>
+        <div class="line">net and industrial process emissions toward 2021,</div>
+        <div class="line">suggesting increased industrial activity or energy demand</div>
+        <div class="line">over time.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LEVEL_COLORS = {
+  "Good": "#2ca02c",
+  "Moderate": "#ffcc00",
+  "Unhealthy": "#ff7f0e",
+  "Very Unhealthy": "#d62728",
+  "Hazardous": "#5c4033"
+};
+
+// ---------------- Malaysia Map ----------------
+const MAP_CSV = "https://raw.githubusercontent.com/EeGwen/FIT3179-Data-Visualisation-2/refs/heads/main/Air-Pollution-Index-in-Malaysia_long.csv";
+const TOPOJSON_URL = "https://raw.githubusercontent.com/EeGwen/FIT3179-Data-Visualisation-2/refs/heads/main/ne_110m%20(1).json";
+
+/* Use container width and autosize so embed grows to available width on page */
+const mapSpecTemplate = {
+  "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+  "autosize": {"type":"fit","contains":"padding"},
+  "width": "container",
+  "height": 600,
+  "projection":{"type":"mercator","center":[112,2],"scale":2000},
+  "layer":[
+    {"data":{"url":TOPOJSON_URL,"format":{"type":"topojson","feature":"ne_110m_admin_0_countries"}},
+     "mark":{"type":"geoshape","fill":"#f3f4f7","stroke":"#c9c9cf","strokeWidth":0.6}},
+    {"data":{"values":[]},
+     "mark":{"type":"circle","stroke":"#ffffff","strokeWidth":0.7,"opacity":0.95},
+     "encoding":{
+       "longitude":{"field":"Longitude","type":"quantitative"},
+       "latitude":{"field":"Latitude","type":"quantitative"},
+       /* increased marker size for better visibility */
+       "size":{"value":220},
+       "color":{"field":"Air Pollution Level","type":"nominal",
+         "scale":{"domain":["Good","Moderate","Unhealthy","Very Unhealthy","Hazardous"],
+                 "range":[LEVEL_COLORS.Good,LEVEL_COLORS.Moderate,LEVEL_COLORS.Unhealthy,LEVEL_COLORS["Very Unhealthy"],LEVEL_COLORS.Hazardous]},
+         "legend":{"title":"Air Pollution Level"}},
+       "tooltip":[
+         {"field":"City","type":"nominal","title":"City"},
+         {"field":"State","type":"nominal","title":"State"},
+         {"field":"API","type":"quantitative","title":"API"},
+         {"field":"Air Pollution Level","type":"nominal","title":"Level"},
+         {"field":"Day","type":"ordinal","title":"Day"},
+         {"field":"Month","type":"nominal","title":"Month"},
+         {"field":"Time","type":"nominal","title":"Time"}]
+    }}
+  ]
+};
+
+d3.csv(MAP_CSV).then(raw=>{
+  const cleaned = raw.map(r=>({
+    Day: String(r.Day||""),
+    Month: String(r.Month||""),
+    Time: String(r.Time||""),
+    City: String(r.City||""),
+    State: String(r.State||""),
+    Latitude: r.Latitude? +r.Latitude:null,
+    Longitude: r.Longitude? +r.Longitude:null,
+    API: r.API? +r.API:null,
+    "Air Pollution Level": r["Air Pollution Level"]||""
+  }));
+  const withCoords = cleaned.filter(d=>d.Latitude!=null && d.Longitude!=null && !isNaN(d.Latitude) && !isNaN(d.Longitude));
+
+  function populateSelect(selEl, values){
+    selEl.innerHTML="";
+    const allOpt = document.createElement("option"); allOpt.value="All"; allOpt.text="All"; selEl.appendChild(allOpt);
+    values.forEach(v=>{ const opt=document.createElement("option"); opt.value=v; opt.text=v; selEl.appendChild(opt);});
+  }
+
+  const days = Array.from(new Set(withCoords.map(d=>d.Day))).filter(Boolean).sort((a,b)=>+a - +b);
+  const months = Array.from(new Set(withCoords.map(d=>d.Month))).filter(Boolean)
+                 .sort((a,b)=>["January","February","March","April","May","June","July","August","September","October","November","December"].indexOf(a)
+                                - ["January","February","March","April","May","June","July","August","September","October","November","December"].indexOf(b));
+  const times = Array.from(new Set(withCoords.map(d=>d.Time))).filter(Boolean).sort();
+
+  populateSelect(document.getElementById("filter-day"),days);
+  populateSelect(document.getElementById("filter-month"),months);
+  populateSelect(document.getElementById("filter-time"),times);
+
+  document.getElementById("map-reset").addEventListener("click",()=>{ document.getElementById("filter-day").value="All"; document.getElementById("filter-month").value="All"; document.getElementById("filter-time").value="All"; renderMap();});
+  document.getElementById("filter-day").addEventListener("change",renderMap);
+  document.getElementById("filter-month").addEventListener("change",renderMap);
+  document.getElementById("filter-time").addEventListener("change",renderMap);
+
+  function renderMap(){
+    const selDay=document.getElementById("filter-day").value;
+    const selMonth=document.getElementById("filter-month").value;
+    const selTime=document.getElementById("filter-time").value;
+    const filtered = withCoords.filter(d=>{
+      if(selDay!=="All" && d.Day!==selDay) return false;
+      if(selMonth!=="All" && d.Month!==selMonth) return false;
+      if(selTime!=="All" && d.Time!==selTime) return false;
+      return true;
+    });
+    if(filtered.length===0){ document.getElementById("map").innerHTML="<p style='color:#666;'>No data for the selected combination.</p>"; return;}
+    const spec=JSON.parse(JSON.stringify(mapSpecTemplate));
+    spec.layer[1].data.values=filtered;
+    vegaEmbed("#map",spec,{actions:true,renderer:"canvas"}).catch(err=>console.error(err));
+  }
+
+  renderMap();
+});
+
+// ---------------- Donut Chart ----------------
+const DONUT_CSV_URL = "https://raw.githubusercontent.com/EeGwen/FIT3179-Data-Visualisation-2/refs/heads/main/air_index_cleaned_long.csv";
+
+const donutSpecTemplate = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "autosize": {"type":"fit","contains":"padding"},
+  "width": "container",
+  "height": 480,
+  "title": {"text": "Distribution of Pollution Levels by City Count", "anchor": "start"},
+  "data": {"values": []},
+  "layer": [
+    {
+      "mark": {"type": "arc", "innerRadius": 100, "outerRadius": 220, "stroke": "#fff", "strokeWidth": 2},
+      "encoding": {
+        "theta": {"field": "count", "type": "quantitative", "stack": true},
+        "color": {
+          "field": "Air_Pollution_Level", 
+          "type": "nominal",
+          "scale": {
+            "domain": ["Good", "Moderate", "Unhealthy"],
+            "range": ["#2ca02c", "#ffcc00", "#ff7f0e"]
+          },
+          "legend": {"title": "Pollution Level"}
+        },
+        "tooltip": [
+          {"field": "Air_Pollution_Level", "type": "nominal", "title": "Level"},
+          {"field": "count", "type": "quantitative", "title": "Number of Cities"},
+          {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".1%"}
+        ]
+      }
+    }
+  ]
+};
+
+d3.csv(DONUT_CSV_URL).then(rawData => {
+  const data = rawData.map(d => ({
+    City: d.City,
+    Countries: d.Countries,
+    Year: String(d.Year),
+    Air_Pollution_Index: d.Air_Pollution_Index ? +d.Air_Pollution_Index : null,
+    Air_Pollution_Level: d.Air_Pollution_Level || "Unknown"
+  })).filter(d => d.Air_Pollution_Level !== "Unknown" && d.Air_Pollution_Level !== "NA");
+
+  const years = Array.from(new Set(data.map(d => d.Year))).sort();
+  const yearSelect = document.getElementById("donut-year");
+  
+  years.forEach(y => {
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.text = y;
+    yearSelect.appendChild(opt);
+  });
+  yearSelect.value = "2022";
+
+  yearSelect.addEventListener("change", renderDonutChart);
+  renderDonutChart();
+
+  function renderDonutChart() {
+    const selectedYear = yearSelect.value;
+    const filtered = data.filter(d => d.Year === selectedYear);
+    
+    const levelCounts = {};
+    filtered.forEach(d => {
+      levelCounts[d.Air_Pollution_Level] = (levelCounts[d.Air_Pollution_Level] || 0) + 1;
+    });
+
+    const totalCities = filtered.length;
+    const chartData = Object.entries(levelCounts).map(([level, count]) => ({
+      Air_Pollution_Level: level,
+      count: count,
+      percentage: totalCities > 0 ? count / totalCities : 0
+    }));
+
+    if (chartData.length === 0) {
+      document.getElementById("donut-chart").innerHTML = "<p style='color:#666;'>No data available for selected year.</p>";
+      return;
+    }
+
+    const spec = JSON.parse(JSON.stringify(donutSpecTemplate));
+    spec.data.values = chartData;
+    spec.title.text = `Pollution Level Distribution (${selectedYear})`;
+
+    vegaEmbed("#donut-chart", spec, {actions: true,renderer: "canvas"})
+      .catch(err => console.error("Donut chart error:", err));
+  }
+});
+
+// ---------------- Monthly Chart ----------------
+const CSV_URL="https://raw.githubusercontent.com/EeGwen/FIT3179-Data-Visualisation-2/refs/heads/main/air_pollution_with_month_year.csv";
+const MONTH_ORDER=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const baseSpec={
+  "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+  "autosize": {"type":"fit","contains":"padding"},
+  "width":"container","height":480,
+  "data":{"values":[]},
+  "mark":{"type":"line","point":true,"clip":true},
+  "encoding":{
+    "x":{"field":"month","type":"ordinal","axis":{"title":"Month"},"scale":{"domain":MONTH_ORDER}},
+    "y":{"field":"concentration_num","type":"quantitative","axis":{"title":"Concentration"}},
+    "color":{"field":"year","type":"nominal","legend":{"title":"Year"}},
+    "detail":[{"field":"year"},{"field":"pollutant"}],
+    "tooltip":[
+      {"field":"pollutant","type":"nominal","title":"Pollutant"},
+      {"field":"year","type":"nominal","title":"Year"},
+      {"field":"month","type":"ordinal","title":"Month"},
+      {"field":"concentration_num","type":"quantitative","title":"Concentration"}]
+  }
+};
+d3.csv(CSV_URL).then(rawData=>{
+  const data = rawData.map(d=>({ date:d.date, pollutant:d.pollutant?.trim(), concentration_num:d.concentration?+d.concentration:null, month:d.month?.trim(), year:d.year?.trim() }));
+  const cleaned=data.filter(d=>d.concentration_num!=null);
+  const pollutants=Array.from(new Set(cleaned.map(d=>d.pollutant))).filter(Boolean).sort();
+  const years=Array.from(new Set(cleaned.map(d=>d.year))).filter(Boolean).sort();
+
+  const pollContainer=document.getElementById("pollutant-radios");
+  pollutants.forEach((p,idx)=>{ const id="radio-"+p.replace(/\s+/g,"_"); const wrapper=document.createElement("div"); wrapper.innerHTML=`<label><input type="radio" name="pollutant" id="${id}" value="${p}" ${idx===0?'checked':''}> ${p}</label>`; pollContainer.appendChild(wrapper);});
+
+  const yearContainer=document.getElementById("year-checkboxes");
+  years.forEach(y=>{ const id="year-"+y; const wrapper=document.createElement("div"); wrapper.innerHTML=`<label><input type="checkbox" id="${id}" value="${y}" checked> ${y}</label>`; yearContainer.appendChild(wrapper); });
+
+  document.getElementById("reset-btn").addEventListener("click",()=>{ pollContainer.querySelector('input[name="pollutant"]').checked=true; yearContainer.querySelectorAll('input[type="checkbox"]').forEach(ch=>ch.checked=true); render(); });
+  pollContainer.addEventListener("change",render);
+  yearContainer.addEventListener("change",render);
+
+  render();
+  function render(){
+    const selectedPoll=document.querySelector('input[name="pollutant"]:checked')?.value;
+    const selectedYears=Array.from(yearContainer.querySelectorAll('input[type="checkbox"]:checked')).map(i=>i.value);
+    if(!selectedPoll || selectedYears.length===0){ document.getElementById("chart").innerHTML="<p style='color:#666;'>Select pollutant and year(s).</p>"; return; }
+    const filtered=cleaned.filter(d=>d.pollutant===selectedPoll && selectedYears.includes(d.year));
+    if(filtered.length===0){ document.getElementById("chart").innerHTML="<p style='color:#666;'>No data for selection.</p>"; return; }
+    const spec=JSON.parse(JSON.stringify(baseSpec)); spec.data={values:filtered};
+    vegaEmbed("#chart",spec,{actions:true,renderer:"canvas"}).catch(err=>console.error(err));
+  }
+});
+
+// ---------------- GHG Chart ----------------
+(function(){
+  const GHG_CSV_URL="https://raw.githubusercontent.com/EeGwen/FIT3179-Data-Visualisation-2/refs/heads/main/ghg_emissions_with_year.csv";
+  const SOURCE_LABELS={"total":"Total Emissions","net":"Net Emissions","energy":"Energy","industrial_processes":"Industrial Processes","agriculture":"Agriculture","waste":"Waste"};
+  const ghgSpecTemplate={
+    "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+    "autosize": {"type":"fit","contains":"padding"},
+    "width":"container","height":480,
+    "data":{"values":[]},
+    "mark":{"type":"bar","tooltip":true,"clip":true},
+    "encoding":{
+      "x":{"field":"source","type":"nominal","axis":{"title":"Source","labelAngle":0}},
+      "xOffset":{"field":"year","type":"nominal"},
+      "y":{"field":"emissions_num","type":"quantitative","axis":{"title":"Emissions"}},
+      "color":{"field":"year","type":"nominal","legend":{"title":"Year"}},
+      "tooltip":[{"field":"source","type":"nominal","title":"Source (code)"},{"field":"source_full","type":"nominal","title":"Source (full)"},{"field":"year","type":"nominal","title":"Year"},{"field":"emissions_num","type":"quantitative","title":"Emissions"}]
+    }
+  };
+  d3.csv(GHG_CSV_URL).then(raw=>{
+    const parsed=raw.map(d=>({source:d.source?.trim(),emissions_num:d.emissions?+d.emissions:null,year:d.year?.trim(),source_full:SOURCE_LABELS[d.source?.trim()]||d.source})).filter(d=>d.emissions_num!=null && d.source && d.year);
+    const years=Array.from(new Set(parsed.map(d=>d.year))).sort();
+    const yearContainer=document.getElementById("ghg-year-checkboxes");
+    yearContainer.innerHTML="";
+    const allId="ghg-year-all";
+    const allWrapper=document.createElement("div"); allWrapper.innerHTML=`<label><input type="checkbox" id="${allId}" checked> All</label>`; yearContainer.appendChild(allWrapper);
+    years.forEach(y=>{ const id="ghg-year-"+y; const wrapper=document.createElement("div"); wrapper.innerHTML=`<label><input type="checkbox" id="${id}" value="${y}" checked> ${y}</label>`; yearContainer.appendChild(wrapper); });
+
+    const legendDiv=document.getElementById("ghg-source-legend"); legendDiv.innerHTML="<strong>Source codes:</strong>";
+    const ul=document.createElement("ul"); Object.entries(SOURCE_LABELS).forEach(([k,v])=>{ const li=document.createElement("li"); li.textContent=`${k} — ${v}`; ul.appendChild(li);}); legendDiv.appendChild(ul);
+
+    yearContainer.addEventListener("change",()=>{ const allBox=document.getElementById(allId); const yearBoxes=Array.from(yearContainer.querySelectorAll('input[type="checkbox"]')).filter(i=>i.id!==allId); allBox.checked=yearBoxes.every(b=>b.checked); renderGHG(); });
+    document.getElementById(allId).addEventListener("change",()=>{ const checked=document.getElementById(allId).checked; yearContainer.querySelectorAll('input[type="checkbox"]').forEach(ch=>ch.checked=checked); renderGHG(); });
+    renderGHG();
+    function renderGHG(){
+      const selectedYears=Array.from(yearContainer.querySelectorAll('input[type="checkbox"]:checked')).map(i=>i.value).filter(Boolean);
+      const filtered=parsed.filter(d=>selectedYears.includes(d.year));
+      if(filtered.length===0){ document.getElementById("ghg-chart").innerHTML="<p style='color:#666;'>No data for selected year(s)</p>"; return;}
+      const spec=JSON.parse(JSON.stringify(ghgSpecTemplate)); spec.data.values=filtered;
+      vegaEmbed("#ghg-chart",spec,{actions:true,renderer:"canvas"}).catch(err=>console.error(err));
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
