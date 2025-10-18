@@ -1,0 +1,175 @@
+Country,Average AQI,AQI Category
+Afghanistan,86,Moderate
+Albania,77,Moderate
+Algeria,106,Unhealthy
+Andorra,32,Good
+Angola,85,Moderate
+Argentina,29,Good
+Armenia,52,Moderate
+Aruba,163,Unhealthy
+Australia,34,Good
+Austria,53,Moderate
+Azerbaijan,61,Moderate
+Bahrain,188,Unhealthy
+Bangladesh,99,Moderate
+Barbados,73,Moderate
+Belarus,35,Good
+Belgium,44,Good
+Belize,46,Good
+Benin,62,Moderate
+Bhutan,26,Good
+Bolivia (Plurinational State of),25,Good
+Bosnia and Herzegovina,61,Moderate
+Botswana,45,Good
+Brazil,43,Good
+Bulgaria,53,Moderate
+Burkina Faso,55,Moderate
+Burundi,62,Moderate
+Cabo Verde,38,Good
+Cambodia,46,Good
+Cameroon,67,Moderate
+Canada,45,Good
+Central African Republic,62,Moderate
+Chad,80,Moderate
+Chile,105,Unhealthy
+China,124,Unhealthy
+Colombia,68,Moderate
+Comoros,33,Good
+Congo,78,Moderate
+Costa Rica,57,Moderate
+Croatia,58,Moderate
+Cuba,61,Moderate
+Cyprus,50,Good
+Czechia,61,Moderate
+Côte d'Ivoire,51,Moderate
+Democratic Republic of the Congo,108,Unhealthy
+Denmark,38,Good
+Dominican Republic,110,Unhealthy
+Ecuador,46,Good
+Egypt,71,Moderate
+El Salvador,98,Moderate
+Equatorial Guinea,42,Good
+Eritrea,109,Unhealthy
+Estonia,43,Good
+Ethiopia,81,Moderate
+Finland,39,Good
+France,52,Moderate
+Gabon,74,Moderate
+Gambia,149,Unhealthy
+Georgia,41,Good
+Germany,48,Good
+Ghana,63,Moderate
+Greece,74,Moderate
+Guatemala,75,Moderate
+Guinea,61,Moderate
+Guinea-Bissau,120,Unhealthy
+Guyana,35,Good
+Haiti,116,Unhealthy
+Honduras,66,Moderate
+Hungary,62,Moderate
+Iceland,23,Good
+India,143,Unhealthy
+Indonesia,87,Moderate
+Iran (Islamic Republic of),113,Unhealthy
+Iraq,133,Unhealthy
+Ireland,41,Good
+Israel,85,Moderate
+Italy,62,Moderate
+Jamaica,91,Moderate
+Japan,53,Moderate
+Jordan,92,Moderate
+Kazakhstan,56,Moderate
+Kenya,72,Moderate
+Kingdom of Eswatini,94,Moderate
+"Korea, South",421,Hazardous
+Kuwait,161,Unhealthy
+Kyrgyzstan,81,Moderate
+Lao People's Democratic Republic,45,Good
+Latvia,41,Good
+Lebanon,64,Moderate
+Lesotho,98,Moderate
+Liberia,39,Good
+Libya,79,Moderate
+Lithuania,37,Good
+Luxembourg,26,Good
+Madagascar,31,Good
+Malawi,47,Good
+Malaysia,93,Moderate
+Maldives,19,Good
+Mali,97,Moderate
+Malta,50,Good
+Mauritania,164,Unhealthy
+Mauritius,47,Good
+Mexico,86,Moderate
+Monaco,56,Moderate
+Mongolia,53,Moderate
+Montenegro,60,Moderate
+Morocco,51,Moderate
+Mozambique,36,Good
+Myanmar,37,Good
+Namibia,59,Moderate
+Nepal,108,Unhealthy
+Netherlands,38,Good
+New Zealand,28,Good
+Nicaragua,50,Good
+Niger,77,Moderate
+Nigeria,97,Moderate
+Norway,36,Good
+Oman,155,Unhealthy
+Pakistan,184,Unhealthy
+Palau,16,Good
+Panama,69,Moderate
+Papua New Guinea,25,Good
+Paraguay,45,Good
+Peru,39,Good
+Philippines,70,Moderate
+Poland,50,Good
+Portugal,34,Good
+Qatar,164,Unhealthy
+Republic of Moldova,50,Good
+Republic of North Macedonia,64,Moderate
+Romania,55,Moderate
+Russian Federation,42,Good
+Rwanda,94,Moderate
+Saint Kitts and Nevis,90,Moderate
+Saint Lucia,79,Moderate
+Saudi Arabia,168,Unhealthy
+Senegal,154,Unhealthy
+Serbia,69,Moderate
+Seychelles,26,Good
+Sierra Leone,43,Good
+Singapore,91,Moderate
+Slovakia,68,Moderate
+Slovenia,72,Moderate
+Solomon Islands,18,Good
+Somalia,72,Moderate
+South Africa,114,Unhealthy
+South Sudan,60,Moderate
+Spain,39,Good
+Sri Lanka,58,Moderate
+State of Palestine,86,Moderate
+Sudan,70,Moderate
+Suriname,43,Good
+Sweden,37,Good
+Switzerland,58,Moderate
+Syrian Arab Republic,72,Moderate
+Tajikistan,112,Unhealthy
+Thailand,54,Moderate
+Togo,52,Moderate
+Trinidad and Tobago,93,Moderate
+Tunisia,51,Moderate
+Turkey,52,Moderate
+Turkmenistan,115,Unhealthy
+Uganda,84,Moderate
+Ukraine,51,Moderate
+United Arab Emirates,164,Unhealthy
+United Kingdom of Great Britain and Northern Ireland,39,Good
+United Republic of Tanzania,35,Good
+United States of America,60,Moderate
+Uruguay,26,Good
+Uzbekistan,118,Unhealthy
+Venezuela (Bolivarian Republic of),83,Moderate
+Viet Nam,89,Moderate
+Yemen,131,Unhealthy
+Zambia,42,Good
+Zimbabwe,47,Good
