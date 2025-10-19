@@ -1,0 +1,175 @@
+Country,Average AQI,AQI Category,Cities Count
+Afghanistan,86,Moderate,3
+Albania,77,Moderate,9
+Algeria,106,Unhealthy,4
+Andorra,32,Good,1
+Angola,85,Moderate,21
+Argentina,29,Good,42
+Armenia,52,Moderate,20
+Aruba,163,Unhealthy,1
+Australia,34,Good,78
+Austria,53,Moderate,47
+Azerbaijan,61,Moderate,20
+Bahrain,188,Unhealthy,1
+Bangladesh,99,Moderate,10
+Barbados,73,Moderate,1
+Belarus,35,Good,18
+Belgium,44,Good,250
+Belize,46,Good,3
+Benin,62,Moderate,16
+Bhutan,26,Good,2
+Bolivia (Plurinational State of),25,Good,24
+Bosnia and Herzegovina,61,Moderate,15
+Botswana,45,Good,17
+Brazil,43,Good,784
+Bulgaria,53,Moderate,43
+Burkina Faso,55,Moderate,22
+Burundi,62,Moderate,13
+Cabo Verde,38,Good,2
+Cambodia,46,Good,8
+Cameroon,67,Moderate,37
+Canada,45,Good,111
+Central African Republic,62,Moderate,18
+Chad,80,Moderate,23
+Chile,105,Unhealthy,63
+China,124,Unhealthy,388
+Colombia,68,Moderate,160
+Comoros,33,Good,3
+Congo,78,Moderate,8
+Costa Rica,57,Moderate,26
+Croatia,58,Moderate,22
+Cuba,61,Moderate,57
+Cyprus,50,Good,1
+Czechia,61,Moderate,43
+Côte d'Ivoire,51,Moderate,26
+Democratic Republic of the Congo,108,Unhealthy,64
+Denmark,38,Good,37
+Dominican Republic,110,Unhealthy,22
+Ecuador,46,Good,50
+Egypt,71,Moderate,8
+El Salvador,98,Moderate,22
+Equatorial Guinea,42,Good,2
+Eritrea,109,Unhealthy,3
+Estonia,43,Good,7
+Ethiopia,81,Moderate,23
+Finland,39,Good,64
+France,52,Moderate,439
+Gabon,74,Moderate,8
+Gambia,149,Unhealthy,6
+Georgia,41,Good,12
+Germany,48,Good,1040
+Ghana,63,Moderate,49
+Greece,74,Moderate,4
+Guatemala,75,Moderate,77
+Guinea,61,Moderate,12
+Guinea-Bissau,120,Unhealthy,1
+Guyana,35,Good,4
+Haiti,116,Unhealthy,7
+Honduras,66,Moderate,18
+Hungary,62,Moderate,46
+Iceland,23,Good,1
+India,143,Unhealthy,724
+Indonesia,87,Moderate,123
+Iran (Islamic Republic of),113,Unhealthy,29
+Iraq,133,Unhealthy,3
+Ireland,41,Good,25
+Israel,85,Moderate,28
+Italy,62,Moderate,845
+Jamaica,91,Moderate,6
+Japan,53,Moderate,450
+Jordan,92,Moderate,2
+Kazakhstan,56,Moderate,22
+Kenya,72,Moderate,45
+Kingdom of Eswatini,94,Moderate,2
+Kuwait,161,Unhealthy,1
+Kyrgyzstan,81,Moderate,8
+Lao People's Democratic Republic,45,Good,4
+Latvia,41,Good,16
+Lebanon,64,Moderate,1
+Lesotho,98,Moderate,4
+Liberia,39,Good,8
+Libya,79,Moderate,5
+Lithuania,37,Good,14
+Luxembourg,26,Good,1
+Madagascar,31,Good,52
+Malawi,47,Good,21
+Malaysia,93,Moderate,32
+Maldives,19,Good,1
+Mali,97,Moderate,16
+Malta,50,Good,6
+Mauritania,164,Unhealthy,3
+Mauritius,47,Good,12
+Mexico,86,Moderate,254
+Monaco,56,Moderate,1
+Mongolia,53,Moderate,6
+Montenegro,60,Moderate,3
+Morocco,51,Moderate,10
+Mozambique,36,Good,18
+Myanmar,37,Good,39
+Namibia,59,Moderate,13
+Nepal,108,Unhealthy,8
+Netherlands,38,Good,246
+New Zealand,28,Good,20
+Nicaragua,50,Good,29
+Niger,77,Moderate,12
+Nigeria,97,Moderate,70
+Norway,36,Good,15
+Oman,155,Unhealthy,1
+Pakistan,184,Unhealthy,98
+Palau,16,Good,1
+Panama,69,Moderate,12
+Papua New Guinea,25,Good,14
+Paraguay,45,Good,14
+Peru,39,Good,78
+Philippines,70,Moderate,231
+Poland,50,Good,162
+Portugal,34,Good,61
+Qatar,164,Unhealthy,1
+Republic of Moldova,50,Good,16
+Republic of North Macedonia,64,Moderate,30
+Romania,55,Moderate,87
+Russian Federation,42,Good,853
+Rwanda,94,Moderate,13
+Saint Kitts and Nevis,90,Moderate,1
+Saint Lucia,79,Moderate,1
+Saudi Arabia,168,Unhealthy,4
+Senegal,154,Unhealthy,18
+Serbia,69,Moderate,52
+Seychelles,26,Good,1
+Sierra Leone,43,Good,14
+Singapore,91,Moderate,1
+Slovakia,68,Moderate,24
+Slovenia,72,Moderate,14
+Solomon Islands,18,Good,1
+Somalia,72,Moderate,10
+South Africa,114,Unhealthy,94
+South Korea,421,Hazardous,1
+South Sudan,60,Moderate,9
+Spain,39,Good,246
+Sri Lanka,58,Moderate,27
+State of Palestine,86,Moderate,1
+Sudan,70,Moderate,4
+Suriname,43,Good,3
+Sweden,37,Good,45
+Switzerland,58,Moderate,89
+Syrian Arab Republic,72,Moderate,4
+Tajikistan,112,Unhealthy,13
+Thailand,54,Moderate,159
+Togo,52,Moderate,8
+Trinidad and Tobago,93,Moderate,8
+Tunisia,51,Moderate,2
+Turkey,52,Moderate,117
+Turkmenistan,115,Unhealthy,7
+Uganda,84,Moderate,61
+Ukraine,51,Moderate,144
+United Arab Emirates,164,Unhealthy,3
+United Kingdom of Great Britain and Northern Ireland,39,Good,360
+United Republic of Tanzania,35,Good,64
+United States of America,60,Moderate,2777
+Uruguay,26,Good,18
+Uzbekistan,118,Unhealthy,26
+Venezuela (Bolivarian Republic of),83,Moderate,52
+Viet Nam,89,Moderate,6
+Yemen,131,Unhealthy,2
+Zambia,42,Good,28
+Zimbabwe,47,Good,25
