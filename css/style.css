@@ -1,0 +1,420 @@
+/* style.css
+   Styles extracted from index.html + small organisation improvements.
+   Save as style.css and link from your HTML <head>.
+*/
+
+/* -----------------------------
+   CSS Variables (theme / palette)
+   ----------------------------- */
+:root {
+  --page-bg: #f6f7f8;
+  --panel-bg: #ffffff;
+  --muted: #666666;
+  --border: #eeeeee;
+  --accent: #444444;
+  --accent-strong: #222222;
+  --shadow: rgba(0,0,0,0.06);
+  --danger: #b91c1c;
+  --danger-bg: #fff6f6;
+  --danger-border: #f3c6c6;
+  --max-width: 1280px;
+  --gutter: 20px;
+  --radius: 8px;
+  --text: #222222;
+}
+
+/* -----------------------------
+   Page / Base
+   ----------------------------- */
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 20px;
+  background: var(--page-bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optional central container — useful if you want to center content */
+.container {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* -----------------------------
+   Controls / Form UI
+   ----------------------------- */
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 6px;
+  background: #fafafa;
+  min-width: 180px;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  user-select: none;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+select,
+button,
+input, textarea {
+  margin-top: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+/* small informative text under controls */
+.small-note {
+  font-size: 0.9em;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* -----------------------------
+   Structural separators
+   ----------------------------- */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+/* -----------------------------
+   Chart / Map containers
+   ----------------------------- */
+#chart,
+#ghg-chart,
+#map,
+#world-map,
+#donut-chart {
+  margin-top: 10px;
+  background: var(--panel-bg);
+  box-sizing: border-box;
+}
+
+/* bordered graph container used throughout */
+.graph-container {
+  border: 2px solid #dddddd;
+  padding: 18px;
+  border-radius: var(--radius);
+  margin-bottom: 30px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--panel-bg);
+  box-shadow: 0 1px 3px rgba(16,24,40,0.04);
+}
+
+/* Title style used inside graph containers */
+.graph-container h1 {
+  font-size: 1.2rem;
+  margin: 4px 0 12px 0;
+}
+
+/* Main page title */
+h2.main-title {
+  text-align: center;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 8px;
+  font-size: 2em;
+}
+
+/* -----------------------------
+   Tabs (non-sticky) under title
+   ----------------------------- */
+.tabs-wrapper {
+  margin: 14px 0 20px 0;
+  position: static; /* as requested: non-sticky */
+  z-index: 40;
+  background: transparent;
+  padding: 8px 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 6px var(--shadow);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  border: 1px solid var(--border);
+}
+
+.tab {
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #444;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.08s ease;
+  white-space: nowrap;
+}
+
+.tab:hover { transform: translateY(-1px); }
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent-strong);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.tab:focus {
+  outline: 3px solid rgba(0,0,0,0.08);
+  outline-offset: 2px;
+}
+
+/* -----------------------------
+   Two-column visual + description layout
+   ----------------------------- */
+.visual-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.visual-left {
+  flex: 0 0 70%;
+  box-sizing: border-box;
+}
+
+.visual-right {
+  flex: 0 0 30%;
+  box-sizing: border-box;
+}
+
+/* TEXTBOX: show text beside map with no box */
+.visual-right .textbox {
+  border: none;
+  padding-left: 12px;
+  color: var(--text);
+  font-size: 1.0rem;
+  line-height: 1.7;
+  min-height: 220px;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* each 'line' block inside textbox */
+.textbox .line { display: block; margin: 0 0 6px 0; }
+.textbox .headline { font-weight: 600; margin-bottom: 8px; }
+
+/* -----------------------------
+   Sizes for map / charts / donut
+   ----------------------------- */
+#map { width: 100%; height: 650px; }
+#donut-chart {
+  width: 100%;
+  height: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#chart { width: 100%; min-height: 520px; }
+#ghg-chart { width: 100%; min-height: 520px; }
+#world-map { width: 100%; height: 520px; }
+
+/* Make any inner div in .vis-container fill width and avoid internal scrolls */
+.vis-container > div {
+  width: 100%;
+  overflow-x: visible;
+}
+
+/* -----------------------------
+   Legend small boxes
+   ----------------------------- */
+.legend-box {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  margin-right: 8px;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+
+/* -----------------------------
+   Custom circle radio selector UI
+   ----------------------------- */
+.single-circle-selector {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.circle-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* hide native radio but keep accessible */
+.circle-radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* outer custom circle */
+.radio-ui {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #d0d0d0;
+  background: #ffffff;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  box-sizing: border-box;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  flex: 0 0 22px;
+}
+
+/* inner filled circle when checked */
+.circle-radio input[type="radio"]:checked + .radio-ui {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 0 rgba(0,0,0,0.06) inset;
+}
+.circle-radio input[type="radio"]:checked + .radio-ui::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+/* small colored dot in selectors */
+.circle-dot {
+  display:inline-block;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  margin-left:8px;
+  vertical-align:middle;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.06) inset;
+}
+
+.circle-radio .label {
+  margin-left: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+/* -----------------------------
+   Map error / message
+   ----------------------------- */
+.map-error {
+  padding: 16px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: 6px;
+  border: 1px solid var(--danger-border);
+}
+
+/* -----------------------------
+   Responsive: stacking & tweaks
+   ----------------------------- */
+@media (max-width: 900px) {
+  .visual-row {
+    flex-direction: column;
+  }
+  .visual-left,
+  .visual-right {
+    flex: 1 1 100%;
+  }
+  .graph-container {
+    padding: 12px;
+    max-width: 100%;
+  }
+  #map { height: 520px; }
+  #donut-chart { height: 420px; }
+  #chart, #ghg-chart { min-height: 420px; }
+
+  .visual-right .textbox {
+    min-height: 160px;
+    margin-top: 12px;
+    padding-left: 0;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    background: #fbfbfb;
+  }
+
+  .tabs {
+    justify-content: flex-start;
+    padding-left: 10px;
+  }
+}
+
+/* collapse circle selector wrapping on narrow screens */
+@media (max-width: 600px) {
+  .single-circle-selector { flex-wrap: wrap; }
+}
+
+/* -----------------------------
+   Utility / helpers (optional)
+   ----------------------------- */
+.clear-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #0056b3;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.clear-btn:hover { background-color: #003d82; }
+.clear-btn:active { background-color: #002b5c; }
+.clear-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
+
+/* small footer note style (if used) */
+.footer {
+  margin-top: 60px;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
