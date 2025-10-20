@@ -1,10 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "World Average Air Quality Index (AQI) by Country",
-    "subtitle": "Binned into categories: Good, Moderate, Unhealthy, Very Unhealthy, Hazardous",
-    "subtitleFontSize": 11
-  },
   "autosize": { "type": "fit", "contains": "padding" },
   "width": "container",
   "height": 520,
@@ -86,7 +81,59 @@
           { "field": "coverage", "type": "nominal", "title": "Coverage" }
         ]
       }
+    },
+
+    {
+      "name": "annotation-lines",
+      "data": {
+        "values": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [132.0, 41.0],
+                  [127.5, 36.0]
+                ]
+              },
+              "properties": { "id": "sk-line" }
+            },
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [106.0, 8.0],
+                  [102.0, 4.2]
+                ]
+              },
+              "properties": { "id": "my-line" }
+            }
+          ]
+        }
+      },
+      "mark": { "type": "geoshape", "stroke": "#333", "strokeWidth": 1.5, "fill": null, "opacity": 0.9 }
+    },
+
+    {
+      "name": "annotation-text",
+      "data": {
+        "values": [
+          { "lon": 132.0, "lat": 41.0, "id": "sk", "label": "South Korea has hazardous AQI" },
+          { "lon": 106.0, "lat": 8.0, "id": "my", "label": "Malaysia has moderate AQI" }
+        ]
+      },
+      "mark": { "type": "text", "fontSize": 12, "fontWeight": "bold", "align": "left", "dx": 6, "dy": -2 },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "text": { "field": "label", "type": "nominal" },
+        "color": { "value": "#111" }
+      }
     }
+
   ],
   "config": {
     "view": { "stroke": "transparent" },
