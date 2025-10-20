@@ -1,0 +1,55 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "autosize": {"type": "fit", "contains": "padding"},
+  "width": "container",
+  "height": 480,
+  "data": { "values": [] },
+  "mark": { "type": "line", "point": true, "clip": true },
+  "encoding": {
+    "x": {
+      "field": "month",
+      "type": "ordinal",
+      "axis": { "title": "Month" },
+      "scale": {
+        "domain": [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ]
+      }
+    },
+    "y": {
+      "field": "concentration_num",
+      "type": "quantitative",
+      "axis": { "title": "Concentration" }
+    },
+    "color": {
+      "field": "year",
+      "type": "nominal",
+      "legend": { "title": "Year" }
+    },
+    "detail": [
+      { "field": "year" },
+      { "field": "pollutant" }
+    ],
+    "tooltip": [
+      { "field": "pollutant", "type": "nominal", "title": "Pollutant" },
+      { "field": "year", "type": "nominal", "title": "Year" },
+      { "field": "month", "type": "ordinal", "title": "Month" },
+      { "field": "concentration_num", "type": "quantitative", "title": "Concentration" }
+    ]
+  },
+  "config": {
+    "axis": { "labelFontSize": 12, "titleFontSize": 13 },
+    "title": { "fontSize": 14 }
+  }
+}
