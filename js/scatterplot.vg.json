@@ -1,0 +1,42 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "AQI vs Health Cases with regression line",
+  "autosize": {"type": "fit", "contains": "padding"},
+  "width": "container",
+  "height": 480,
+  "data": {"values": []},
+  "layer": [
+    {
+      "mark": {"type": "point", "filled": true, "opacity": 0.65, "size": 60, "stroke": "#ffffff", "strokeWidth": 0.6},
+      "encoding": {
+        "x": {"field": "AQI", "type": "quantitative", "title": "Air Quality Index (AQI)"},
+        "y": {"field": "Cases", "type": "quantitative"},
+        "tooltip": [
+          {"field": "AQI", "type": "quantitative", "title": "AQI"},
+          {"field": "Cases", "type": "quantitative"}
+        ],
+        "color": {"value": "#1f77b4"}
+      }
+    },
+    {
+      "transform": [
+        {
+          "regression": "Cases",
+          "on": "AQI",
+          "params": false,
+          "as": ["AQI", "Cases_reg"]
+        }
+      ],
+      "mark": {"type": "line", "interpolate": "linear", "strokeWidth": 3},
+      "encoding": {
+        "x": {"field": "AQI", "type": "quantitative"},
+        "y": {"field": "Cases_reg", "type": "quantitative"},
+        "color": {"value": "#1f77b4"}
+      }
+    }
+  ],
+  "config": {
+    "axis": {"labelFontSize": 12, "titleFontSize": 13},
+    "title": {"fontSize": 14}
+  }
+}
