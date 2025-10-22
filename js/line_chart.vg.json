@@ -1,0 +1,45 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Multiline chart: concentration by month, colored by year",
+  "autosize": {"type": "fit", "contains": "padding"},
+  "width": "container",
+  "height": 480,
+  "data": {"values": []},
+  "mark": {
+    "type": "line",
+    "point": true,
+    "tooltip": true,
+    "interpolate": "linear"
+  },
+  "encoding": {
+    "x": {
+      "field": "month",
+      "type": "ordinal",
+      "title": "Month",
+      "sort": ["January","February","March","April","May","June","July","August","September","October","November","December"],
+      "axis": {"labelAngle": 0}
+    },
+    "y": {
+      "field": "concentration",
+      "type": "quantitative",
+      "title": "Concentration"
+    },
+    "color": {
+      "field": "year",
+      "type": "nominal",
+      "title": "Year",
+      "scale": {"domain": [], "range": []}
+    },
+    "detail": {"field": "year"},
+    "tooltip": [
+      {"field": "pollutant", "type": "nominal", "title": "Pollutant"},
+      {"field": "year", "type": "nominal", "title": "Year"},
+      {"field": "month", "type": "nominal", "title": "Month"},
+      {"field": "concentration", "type": "quantitative", "title": "Concentration"}
+    ]
+  },
+  "config": {
+    "axis": {"labelFontSize": 12, "titleFontSize": 13},
+    "legend": {"titleFontSize": 13, "labelFontSize": 12}
+  }
+}
