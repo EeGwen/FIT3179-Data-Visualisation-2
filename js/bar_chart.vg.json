@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Grouped bar chart of GHG emissions by source and year (uses source_label for x-axis)",
+  "autosize": {"type": "fit", "contains": "padding"},
+  "width": "container",
+  "height": 480,
+  "data": {"values": []},
+  "mark": {"type": "bar", "tooltip": true, "clip": true},
+  "encoding": {
+    "x": {
+      "field": "source_label",
+      "type": "nominal",
+      "axis": {"title": "Source", "labelAngle": 0}
+    },
+    "xOffset": {"field": "year", "type": "nominal"},
+    "y": {
+      "field": "emissions_num",
+      "type": "quantitative",
+      "axis": {"title": "Emissions"}
+    },
+    "color": {
+      "field": "year",
+      "type": "nominal",
+      "legend": {"title": "Year"},
+      "scale": {"domain": [], "range": []}
+    },
+    "tooltip": [
+      {"field": "source_label", "type": "nominal", "title": "Source"},
+      {"field": "year", "type": "nominal", "title": "Year"},
+      {"field": "emissions_num", "type": "quantitative", "title": "Emissions"}
+    ]
+  },
+  "config": {
+    "axis": {"labelFontSize": 12, "titleFontSize": 13},
+    "legend": {"titleFontSize": 13, "labelFontSize": 12}
+  }
+}
