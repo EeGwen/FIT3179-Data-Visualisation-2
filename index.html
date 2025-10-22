@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>The Air We Breathe: A Data-Driven Look at Global Pollution</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="title-banner">
+  <h2 class="main-title">The Air We Breathe: A Data-Driven Look at Global Pollution</h2>
+</div>
+
+<!-- Tabs (non-sticky) -->
+<div class="tabs-wrapper" aria-label="Navigation tabs for graphs">
+  <div class="tabs" role="tablist" id="graph-tabs">
+    <button class="tab" role="tab" data-target="#world-aqi-container" aria-controls="world-aqi-container">Worldwide Overview</button>
+    <button class="tab" role="tab" data-target="#map" aria-controls="map">Malaysia AQI</button>
+    <button class="tab" role="tab" data-target="#chart" aria-controls="chart">Pollutant Distribution</button>
+    <button class="tab" role="tab" data-target="#ghg-chart" aria-controls="ghg-chart">Causes of Air Pollution</button>
+    <button class="tab active" role="tab" data-target="#aqi-cases-container" aria-controls="aqi-cases-container">Impact of Air Pollution</button>
+  </div>
+</div>
+<!-- ====== End tabs ====== -->
+
+<!-- ===== World Average AQI map ===== -->
+<div class="graph-container" id="world-aqi-container">
+  <h1>🌍 Global Distribution of Average Air Quality Index (AQI) by Country</h1>
+
+  <div class="visual-row" aria-label="World average AQI map with description">
+    <!-- left: map -->
+    <div class="visual-left">
+      <div id="world-map" aria-live="polite" role="img" aria-label="World map showing average AQI by country"></div>
+
+      <!-- Updated note section -->
+      <div class="small-note" style="margin-top:6px; line-height:1.5;">
+        The average AQI for each country is calculated based on <br>
+        available city-level data. <b>Countries with fewer monitoring cities</b> (low coverage) <br>
+        may have less representative results.
+      </div>
+    </div>
+
+    <!-- right: Key Findings + shaded textbox -->
+    <div class="visual-right" aria-label="Key findings for world AQI">
+      <div class="key-panel">
+        <div class="key-heading">Key Findings</div>
+
+        <div class="key-box" role="note" aria-label="Summary of global AQI">
+          <p>
+            The global distribution of the average Air Quality Index (AQI)
+            shows clear regional differences. Many parts of Europe, Oceania,
+            and North America have good to moderate air quality, reflecting
+            strong regulations and cleaner energy. In contrast, Asia, the
+            Middle East, and Africa show unhealthy to hazardous levels, often
+            linked to industry, urban growth, and vehicle emissions. South
+            Korea records hazardous AQI, while Malaysia shows moderate levels.
+          </p>
+
+          <p>
+            Russia, several African and South American countries appear in light grey,
+            showing limited or no data and highlighting the need for better
+            monitoring. Overall, the map shows a strong link between economic
+            activity, industrialization, and air quality. Countries with cleaner
+            energy and stricter pollution control generally have healthier air,
+            while limited data coverage may affect how accurately some averages
+            reflect national conditions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ====================================================================== -->
+
+<!-- ===== Malaysia Monthly AQI Map ===== -->
+<div class="graph-container" id="malaysia-aqi-container">
+  <h1>📅 Air Quality Levels Across Different Cities in Malaysia (2022)</h1>
+  <div class="small-note" style="margin-top:6px;">Choose a month to see AQL distribution for that month.</div>
+
+  <div class="controls" id="map-controls">
+    <div class="control-group">
+      <strong>Month</strong>
+      <select id="filter-month"></select>
+    </div>
+    <div class="control-group">
+      <strong>Actions</strong><br>
+      <button id="map-reset">Reset filter</button>
+    </div>
+  </div>
+
+  <div class="visual-row">
+    <!-- left: Malaysia map -->
+    <div class="visual-left">
+      <div id="map"></div>
+    </div>
+
+    <!-- right: Text box (moved down for Malaysia map) -->
+    <div class="visual-right malaysia-textbox" aria-label="Map overview for Malaysia AQI">
+      <div class="key-panel">
+        <div class="key-heading">Map Overview</div>
+
+        <div class="key-box" role="note" aria-label="Malaysia AQI overview">
+          <p>
+            This interactive map provides a detailed, month-by-month analysis of air pollution
+            across Malaysian cities in 2022. It reveals that while Malaysia generally avoids
+            the most extreme levels of air pollution, air quality for most urban populations
+            is consistently classified as ‘Moderate’.
+          </p>
+
+          <p>
+            The true value of this visualization lies in observing the temporal shifts; use
+            the month filter to identify periods of improvement or degradation, highlighting
+            the impacts of seasonal weather patterns and specific pollution events during the year.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Monthly Air Pollution Chart -->
+<div class="graph-container" id="chart-section">
+  <h1>☢️ Monthly Air Pollution Trends by Pollutant Across Years</h1>
+  <div class="small-note">
+    Choose a pollutant and compare years to see how concentrations <br> change across months.
+  </div>
+
+  <!-- Filters with improved layout -->
+  <div class="controls filters-row horizontal-filters">
+    <div class="control-group compact" id="pollutant-controls">
+      <strong>Pollutant</strong>
+      <div id="pollutant-radios" class="compact-selector"></div>
+    </div>
+
+    <div class="control-group compact" id="year-controls">
+      <strong>Year(s)</strong>
+      <div id="year-checkboxes" class="compact-selector"></div>
+    </div>
+
+    <div class="control-group compact actions-control">
+      <strong>Actions</strong><br>
+      <button id="reset-btn">Reset filter</button>
+    </div>
+  </div>
+
+  <div class="visual-row">
+    <div class="visual-left">
+      <div id="chart"></div>
+    </div>
+
+    <div class="visual-right">
+      <!-- New text box with title and paragraph -->
+      <div class="key-panel" style="margin-top: 20px;">
+        <div class="key-heading">Monthly Air Pollution Trends (2017–2022)</div>
+        <div class="key-box" role="note" aria-label="Monthly Air Pollution Trends Analysis">
+          <p>
+            Analysis of air pollution data from 2017 to 2022 reveals clear trends and notable fluctuations 
+            in pollutant concentrations. Levels vary by pollutant type, season, and year, reflecting influences 
+            from seasonal cycles, economic activity, and regulatory measures.
+          </p>
+          <p>
+            Pollution peaked in 2018–2019 for several key pollutants, while 2020 saw marked declines, likely linked to global events.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GHG grouped bar: left graph + right text box -->
+<div class="graph-container">
+    <h1>🌡️ Annual Greenhouse Gas (GHG) Emissions By Source</h1>
+    <div class="small-note">
+      Select one or more years to compare total greenhouse gas <br>emissions across key economic sectors.
+    </div>
+
+    <!-- Filters styled same as line chart -->
+    <div class="controls filters-row horizontal-filters" style="margin-bottom:8px;">
+      <div class="control-group compact" id="ghg-year-controls">
+        <strong>Year(s)</strong>
+        <div id="ghg-year-checkboxes" class="compact-selector"></div>
+      </div>
+    </div>
+
+    <div class="visual-row">
+      <div class="visual-left">
+        <div id="ghg-chart"></div>
+      </div>
+      <div class="visual-right">
+        <div class="key-panel" style="margin-top: 20px;">
+          <div class="key-heading">Summary of Annual GHG Emissions by Source</div>
+          <div class="key-box" role="note" aria-label="GHG Summary">
+            <p>
+              The chart illustrates the total greenhouse gas emissions from 2014 to 2019, broken down by key economic sectors. 
+            </p>
+            <p>
+              Over this six-year period, the Energy sector is the dominant and overwhelmingly largest source of emissions, 
+              followed distantly by Agriculture, Industrial Processes, and Waste. 
+            </p>
+            <p>
+              The data shows a clear upward trend in total emissions, indicating a growing GHG footprint over time, 
+              primarily driven by increases in the Energy sector.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- ================== AQI vs Respiratory/Cardiovascular scatter ================== -->
+<div class="graph-container" id="aqi-cases-container">
+  <h1>🫁 AQI vs Health Cases</h1>
+  <div class="small-note">
+    Select an outcome to compare the incidence of health cases <br> relative to air quality levels.
+  </div>
+
+  <div class="controls" style="align-items:center; margin-bottom:8px;">
+    <div class="control-group" style="display:flex; flex-direction:column; gap:10px;">
+      <strong>Choose outcome</strong>
+      <div class="single-circle-selector" id="case-selector">
+        <!-- Note: input order: input -> .radio-ui -> colored legend dot -> label text -->
+        <label class="circle-radio">
+          <input type="radio" name="caseType" value="respiratory" checked>
+          <span class="radio-ui" aria-hidden="true"></span>
+          <span class="circle-dot" id="dot-resp" style="background:#1f77b4;"></span>
+          <span class="label">Respiratory Cases</span>
+        </label>
+
+        <label class="circle-radio">
+          <input type="radio" name="caseType" value="cardio">
+          <span class="radio-ui" aria-hidden="true"></span>
+          <span class="circle-dot" id="dot-cardio" style="background:#ff7f0e;"></span>
+          <span class="label">Cardiovascular Cases</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="visual-row" aria-label="AQI vs Health Cases scatter plot with summary">
+    <!-- Left: scatterplot -->
+    <div class="visual-left">
+      <div id="aqi-cases-scatter" style="width:100%; min-height:520px;"></div>
+    </div>
+
+    <!-- Right: summary textbox -->
+    <div class="visual-right">
+      <div class="key-panel" style="margin-top: 0;">
+        <div class="key-heading">Summary of AQI vs. Health Cases</div>
+        <div class="key-box" role="note" aria-label="AQI vs Health Cases Summary">
+          <p>
+            The scatter plots visually analyze the correlation between the Air Quality Index (AQI) and the incidence of two major health outcomes: Respiratory cases and Cardiovascular cases.
+          </p>
+          <p>
+            Both graphs demonstrate a clear and strong positive correlation, indicating that as air quality deteriorates (represented by a higher AQI value), the number of reported health cases for both conditions increases significantly. 
+          </p>
+          <p>
+            This provides powerful, data-driven evidence of the direct impact of air pollution on public health.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================== Footer ================== -->
+<footer class="footer">
+  <div class="footer-content">
+    <p><strong>Author:</strong> Ching Ee Gwen</p>
+    <p><strong>Date:</strong> 22/10/2025</p>
+    <p><strong>Data Sources:</strong></p>
+    <ul>
+      <li><a href="https://www.kaggle.com/datasets/adityaramachandran27/world-air-quality-index-by-city-and-coordinates" target="_blank" rel="noopener noreferrer">Worldwide AQI by City (Kaggle)</a></li>
+      <li><a href="https://www.kaggle.com/datasets/ynshung/malaysia-air-pollution-index" target="_blank" rel="noopener noreferrer">Malaysia Air Pollution Index (Kaggle)</a></li>
+      <li><a href="https://data.gov.my/data-catalogue/air_pollution" target="_blank" rel="noopener noreferrer">Air Pollution Data (data.gov.my)</a></li>
+      <li><a href="https://data.gov.my/data-catalogue/ghg_emissions" target="_blank" rel="noopener noreferrer">GHG Emissions Data (data.gov.my)</a></li>
+      <li><a href="https://www.kaggle.com/datasets/rabieelkharoua/air-quality-and-health-impact-dataset" target="_blank" rel="noopener noreferrer">Air Quality & Health Dataset (Kaggle)</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ================== External JS files ================== -->
+<script src="js/world_map.js"></script>
+<script src="js/malaysia_map.js"></script>
+<script src="js/line_chart.js"></script>
+<script src="js/bar_chart.js"></script>
+<script src="js/scatterplot.js"></script>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------- Tabs initialization (unchanged) -------------------------------
+  (function setupTabs() {
+    const tabContainer = document.getElementById('graph-tabs');
+    if(!tabContainer) return;
+    const tabs = Array.from(tabContainer.querySelectorAll('.tab'));
+    const sections = tabs.map(t => {
+      const sel = t.getAttribute('data-target');
+      const el = document.querySelector(sel);
+      return {tab: t, target: el};
+    }).filter(d => d.target);
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        const targetSel = tab.getAttribute('data-target');
+        const target = document.querySelector(targetSel);
+        if(target){
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+          try { target.focus({preventScroll:true}); } catch(e){}
+          setActiveTab(tab);
+        }
+      });
+      tab.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          tab.click();
+        }
+      });
+    });
+
+    function setActiveTab(activeTab){
+      tabs.forEach(t => t.classList.toggle('active', t === activeTab));
+    }
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -40% 0px',
+      threshold: 0
+    };
+
+    const visibleSections = new Map();
+
+    function onIntersection(entries){
+      entries.forEach(entry => {
+        visibleSections.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+      });
+
+      let best = null;
+      for(const [sec, val] of visibleSections.entries()){
+        if(best === null || val > visibleSections.get(best)){
+          best = sec;
+        }
+      }
+      if(best){
+        const pair = sections.find(s => s.target === best);
+        if(pair) setActiveTab(pair.tab);
+      }
+    }
+
+    const observer = new IntersectionObserver(onIntersection, observerOptions);
+    sections.forEach(s => { if(s.target) observer.observe(s.target); });
+
+    window.addEventListener('load', () => {
+      let current = null;
+      for(const s of sections){
+        const rect = s.target.getBoundingClientRect();
+        if(rect.top >= 0 && rect.top < window.innerHeight * 0.6){
+          current = s; break;
+        }
+      }
+      if(current) setActiveTab(current.tab);
+      else if(tabs.length) tabs[0].classList.add('active');
+    });
+
+    tabs.forEach(t => t.setAttribute('tabindex', '0'));
+  })();
+
+}); 
+</script>
+
+</body>
+</html>
